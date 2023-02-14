@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "Sample cloudformation template to deploy service"
+
+Parameters:
+  Key:
+    Type: String
+    Description: The key used to access the instance.
+
+Resources:
+  ServiceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Enable HTTP access via port 80
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+       
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  ServiceInstance:
+    Type: 'AWS::EC2::Instance'
+    DependsOn:
+      - ServiceSecurityGroup
+
+    Metadata:
+        AWS::CloudFormation::Init:
+            configSets:
+                ec2_bootstrap:
+                    - install_docker
+                    - install_compose
+            install_docker:
+                packages:
+                    yum:
+                        docker: []
+                services:
+                    sysvinit:
+                        docker:
+                            enabled: "true"
+                            ensureRunning: "true"
+                commands:
+                    docker_for_ec2_user:
+                        command: usermod -G docker ec2-user
+            install_compose:
+              commands:
+                dowload_compose:
+                  command: sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+                executable_compose:
+                  command: chmod +x /usr/local/bin/docker-compose
+                symlink_compose:
+                  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+    CreationPolicy:
+        ResourceSignal:
+            Timeout: PT5M
+
+    Properties:
+      ImageId: ami-06c39ed6b42908a36
+      InstanceType: t2.micro
+      KeyName: !Ref Key
+      Tags: 
+        - Key: "Name"
+          Value: !Sub '${AWS::StackName}'
+      SecurityGroupIds:
+        - Ref: ServiceSecurityGroup
+      UserData:
+          "Fn::Base64":
+              !Sub |
+                #!/bin/bash -xe
+                # Get the latest CloudFormation package
+                yum update -y aws-cfn-bootstrap
+                # Start cfn-init
+                /opt/aws/bin/cfn-init -s ${AWS::StackId} -r ServiceInstance --configsets ec2_bootstrap --region ${AWS::Region} 
+                # All done so signal success
+                /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource ServiceInstance --region ${AWS::Region}              
+
