@@ -1,0 +1,17 @@
+services:
+  proxy:
+    image: nginx:alpine
+    depends_on:
+      - registry
+    ports:
+      - 443:443
+    volumes:
+      - ./auth:/etc/auth/:ro
+      - ./letsencrypt:/etc/letsencrypt:ro
+      - ./auth-registry.conf:/etc/nginx/conf.d/default.conf:ro
+    
+  registry:
+    container_name: registry-private
+    image: registry:2
+    volumes:
+      - ./data:/var/lib/registry
