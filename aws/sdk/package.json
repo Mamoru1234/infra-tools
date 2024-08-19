@@ -1,0 +1,24 @@
+{
+  "name": "sdk",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^22.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ec2": "^3.632.0",
+    "commander": "^12.1.0",
+    "lodash": "^4.17.21",
+    "tslib": "^2.6.3"
+  }
+}
