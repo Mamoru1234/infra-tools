@@ -18,6 +18,7 @@
   "dependencies": {
     "@aws-sdk/client-ec2": "^3.632.0",
     "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
     "tslib": "^2.6.3"
   }

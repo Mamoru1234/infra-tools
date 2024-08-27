@@ -1,4 +1,5 @@
-import { EC2Client, DescribeInstancesCommand, Instance, Tag, StartInstancesCommand, StopInstancesCommand } from '@aws-sdk/client-ec2';
+import 'dotenv/config';
+import { EC2Client, DescribeInstancesCommand, Tag, StartInstancesCommand, StopInstancesCommand } from '@aws-sdk/client-ec2';
 import { Command } from 'commander';
 import { flatten } from 'lodash';
 import { join } from 'path';
