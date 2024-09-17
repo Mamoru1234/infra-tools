@@ -6,6 +6,7 @@ import { join } from 'path';
 import { STATE_DIR } from './constants';
 import { readFile, writeFile } from 'fs/promises';
 import { homedir } from 'os';
+import { ecrCleanCommand } from './commands/ecr-clean';
 
 const program = new Command();
 
@@ -110,12 +111,12 @@ program.command('sync')
         const serviceName = line.substring(serviceStart).trim();
         const instanceId = config[serviceName];
         if (!instanceId) {
-          console.log('No instance found');
+          console.log('No instance found', serviceName);
           return line;
         }
         const dnsName = dnsNames[instanceId];
         if (!dnsName) {
-          console.log('Dns name not found');
+          console.log('Dns name not found', serviceName);
           return line;
         }
         return line.substring(0, hostStart) + dnsName + line.substring(hostEnd);
@@ -124,5 +125,7 @@ program.command('sync')
     }).join('\n');
     await writeFile(sshConfigPath, newSshConfig);
   });
+
+ecrCleanCommand(program);
 
 program.parseAsync().catch((e) => console.error('Error during parsing', e));
