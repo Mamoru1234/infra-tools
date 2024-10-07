@@ -15,3 +15,5 @@ dt=$(date '+%d.%m.%Y %H:%M:%S');
 
 aws --profile personal s3api put-object --bucket gontarpersonal --key "dump/$SERVER_NAME/$dt.sql" --body ./inserts.sql
 
+rm ./inserts.sql
+
