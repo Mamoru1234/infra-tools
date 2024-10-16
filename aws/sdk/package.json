@@ -16,8 +16,10 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.670.0",
     "@aws-sdk/client-ec2": "^3.632.0",
     "@aws-sdk/client-ecr": "^3.651.1",
+    "@aws-sdk/client-lambda": "^3.670.0",
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "envalid": "^8.0.0",

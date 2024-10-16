@@ -7,6 +7,7 @@ import { STATE_DIR } from './constants';
 import { readFile, writeFile } from 'fs/promises';
 import { homedir } from 'os';
 import { ecrCleanCommand } from './commands/ecr-clean';
+import { cloudWatchClean } from './commands/cloudwatch-clean';
 
 const program = new Command();
 
@@ -127,5 +128,6 @@ program.command('sync')
   });
 
 ecrCleanCommand(program);
+cloudWatchClean(program);
 
 program.parseAsync().catch((e) => console.error('Error during parsing', e));

@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { getEcrClient } from "../aws.client";
-import { BatchDeleteImageCommand, DescribeRepositoriesCommand, ImageIdentifier, ListImagesCommand } from "@aws-sdk/client-ecr";
+import { BatchDeleteImageCommand, DescribeRepositoriesCommand, ListImagesCommand } from "@aws-sdk/client-ecr";
 
 async function ecrCleanAction(): Promise<void> {
   console.log(new Date(), 'Start cleaning ecr');
