@@ -1,0 +1,11 @@
+services:
+  server:
+    container_name: ssl-server
+    image: 575286770774.dkr.ecr.eu-central-1.amazonaws.com/tools/ssl-server:latest
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+    environment:
+      MY_SERVER_NAME: ${MY_SERVER_NAME:?missing_server_name}
+    ports:
+      - 80:80
+      - 443:443
