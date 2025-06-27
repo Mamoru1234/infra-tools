@@ -17,8 +17,9 @@ EOF
 }
 
 connect() {
-  echo "Connecting to VPN..."
-  nordvpn connect
+  COUNTRY=$1
+  echo "Connecting to VPN $COUNTRY..."
+  nordvpn connect $COUNTRY
   nordvpn set killswitch on
 }
 
@@ -36,7 +37,7 @@ main() {
 
   case "$1" in
     connect)
-      connect
+      connect ${2:-GB}
       ;;
     disconnect)
       disconnect
